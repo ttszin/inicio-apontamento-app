@@ -2,10 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View,TextInput,SafeAreaView } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import React, { Component, useState } from 'react';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import DatePicker from 'react-native-datepicker';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import {db} from './firebase.js';
+import styleExterno from '';
+import { NavigationContainer, StackActions } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Routes from "./src/routes.js";
 
-
+const Stack = createNativeStackNavigator()
 
 const MultilineTextInputExample = () => {
   const [value, onChangeText] = React.useState('Texto Descritivo');
@@ -43,14 +49,20 @@ export default class App extends Component {
       textodescritivo: ''
     }
   }
-
+  
   
 
   render() {
-  
+    console.disableYellowBox = true;
+    const[ fontsLoaded ] = useFonts({
+      
+    });
+    if(!fontsLoaded){
+      <AppLoading/>
+    }
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Centro de Trabalho:</Text>
+        <Text style={styles.text}>Centro de Trabalho:</Text>
         <Picker
           style={styles.picker} itemStyle={styles.pickerItem}
           selectedValue={this.state.centrotrab}
@@ -62,33 +74,6 @@ export default class App extends Component {
           <Picker.Item label="MECABNG" value="mecabng" />
         </Picker>
         <MultilineTextInputExample/>
-        
-        <DatePicker
-          style={styles.datePickerStyle}
-          date={date} //initial date from state
-          mode="date" //The enum of date, datetime and time
-          placeholder="select date"
-          format="DD-MM-YYYY"
-          minDate="01-01-2016"
-          maxDate="01-01-2019"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          customStyles={{
-            dateIcon: {
-              //display: 'none',
-              position: 'absolute',
-              left: 0,
-              top: 4,
-              marginLeft: 0,
-            },
-            dateInput: {
-              marginLeft: 36,
-            },
-          }}
-          onDateChange={(date) => {
-            setDate(date);
-          }}
-        />
  
         
         
@@ -102,9 +87,9 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#999999',
     alignItems: 'center',
-    justifyContent: 'center',
+    
   },
   pickerItem: {
     color: 'red'
@@ -114,6 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF0E0',
     borderColor: 'black',
     borderWidth: 1,
+    
   },
   input: {
     width: 250,
@@ -135,6 +121,7 @@ const styles = StyleSheet.create({
     color: 'red',
     padding: 3,
     marginBottom: 10,
-    textAlign: 'center'
+    textAlign: 'center',
+    marginTop:100
   },
 });
